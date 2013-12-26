@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>loggly-csharp</id>
+		<id>loggly-csharp-log4net</id>
 		<authors>Karl Seguin</authors>
 		<owners>Karl Seguin</owners>
 		<licenseUrl>https://github.com/karlseguin/loggly-csharp/blob/master/license.txt</licenseUrl>
@@ -9,10 +9,10 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<language>en-US</language>
 		<tags>LOGS LOGGING NLOG LOGGLY</tags>
-		<version>2.3.0</version>
-		<title>Loggly Csharp Driver</title>
+		<version>1.1.0</version>
+		<title>Loggly Csharp Driver with Log4Net Extension methods</title>
 		<description>
-			The .Net driver for logging to and searching Loggly.com logs.
+			The .Net driver for logging to and searching Loggly.com logs. Includes extension methods for Log4Net.
 		</description>
 		<releaseNotes>
 		</releaseNotes>
@@ -23,8 +23,8 @@
 		<copyright>Copyright  2013</copyright>
 		<dependencies>
 			<group targetFramework="net40">
-				<dependency id="log4net" version="1.2.10" />
-				<dependency id="Newtonsoft.Json" version="5.0.0" />
+				<dependency id="log4net" version="2.0.3" />
+				<dependency id="Newtonsoft.Json" version="5.0.6" />
 			</group>
 		</dependencies>
 		<references></references>
