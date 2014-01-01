@@ -9,7 +9,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<language>en-US</language>
 		<tags>LOGS LOGGING NLOG LOGGLY</tags>
-		<version>1.1.0</version>
+		<version>$version$</version>
 		<title>Loggly Csharp Driver with Log4Net Extension methods</title>
 		<description>
 			The .Net driver for logging to and searching Loggly.com logs. Includes extension methods for Log4Net.
