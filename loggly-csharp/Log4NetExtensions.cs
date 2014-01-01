@@ -28,8 +28,8 @@ namespace Loggly {
 			if ((category == DEBUG && logger.IsDebugEnabled)
 				|| (category == INFO && logger.IsInfoEnabled)
 				|| (category == WARN && logger.IsWarnEnabled)
-				|| (category == ERROR && logger.IsErrorEnabled
-				|| (category == ERROR && data != null && data.ContainsKey("fatal") && logger.IsFatalEnabled))) {
+				|| (category == ERROR && logger.IsErrorEnabled)
+				|| (category == FATAL && logger.IsFatalEnabled)) {
 				// only publish if enabled in Log4net config
 				Publish(message, category, data, exception, logger.Logger.Name);
 			}
