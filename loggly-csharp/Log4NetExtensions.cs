@@ -76,33 +76,9 @@ namespace Loggly {
 			}
 		}
 
-		public static void PublishFatalFormat(this ILog logger, string format, object arg0) {
-			logger.FatalFormat(format, arg0);
-			var message = String.Format(format, arg0);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, FATAL, null, null, logger.Logger.Name);
-			}
-		}
-
 		public static void PublishFatalFormat(this ILog logger, string format, params object[] args) {
 			logger.FatalFormat(format, args);
 			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, FATAL, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishFatalFormat(this ILog logger, string format, object arg0, object arg1) {
-			logger.FatalFormat(format, arg0, arg1);
-			var message = String.Format(format, arg0, arg1);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, FATAL, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishFatalFormat(this ILog logger, string format, object arg0, object arg1, object arg2) {
-			logger.FatalFormat(format, arg0, arg1, arg2);
-			var message = String.Format(format, arg0, arg1, arg2);
 			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 				Publish(message, FATAL, null, null, logger.Logger.Name);
 			}
@@ -126,34 +102,9 @@ namespace Loggly {
 			}
 		}
 
-		public static void PublishErrorFormat(this ILog logger, string format, object arg0) {
-			logger.ErrorFormat(format, arg0);
-			var message = String.Format(format, arg0);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, ERROR, null, null, logger.Logger.Name);
-			}
-		}
-
 		public static void PublishErrorFormat(this ILog logger, string format, params object[] args) {
 			logger.ErrorFormat(format, args);
 			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, ERROR, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishErrorFormat(this ILog logger, string format, object arg0, object arg1) {
-			logger.ErrorFormat(format, arg0, arg1);
-
-			var message = String.Format(format, arg0, arg1);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, ERROR, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishErrorFormat(this ILog logger, string format, object arg0, object arg1, object arg2) {
-			logger.ErrorFormat(format, arg0, arg1, arg2);
-			var message = String.Format(format, arg0, arg1, arg2);
 			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 				Publish(message, ERROR, null, null, logger.Logger.Name);
 			}
@@ -177,35 +128,9 @@ namespace Loggly {
 			}
 		}
 
-		public static void PublishWarnFormat(this ILog logger, string format, object arg0) {
-			logger.WarnFormat(format, arg0);
-
-			var message = String.Format(format, arg0);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, WARN, null, null, logger.Logger.Name);
-			}
-		}
-
 		public static void PublishWarnFormat(this ILog logger, string format, params object[] args) {
 			logger.WarnFormat(format, args);
 			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, WARN, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishWarnFormat(this ILog logger, string format, object arg0, object arg1) {
-			logger.WarnFormat(format, arg0, arg1);
-			var message = String.Format(format, arg0, arg1);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, WARN, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishWarnFormat(this ILog logger, string format, object arg0, object arg1, object arg2) {
-			logger.WarnFormat(format, arg0, arg1, arg2);
-
-			var message = String.Format(format, arg0, arg1, arg2);
 			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 				Publish(message, WARN, null, null, logger.Logger.Name);
 			}
@@ -229,33 +154,9 @@ namespace Loggly {
 			}
 		}
 
-		public static void PublishInfoFormat(this ILog logger, string format, object arg0) {
-			logger.InfoFormat(format, arg0);
-			var message = String.Format(format, arg0);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, INFO, null, null, logger.Logger.Name);
-			}
-		}
-
 		public static void PublishInfoFormat(this ILog logger, string format, params object[] args) {
 			logger.InfoFormat(format, args);
 			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, INFO, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishInfoFormat(this ILog logger, string format, object arg0, object arg1) {
-			logger.InfoFormat(format, arg0, arg1);
-			var message = String.Format(format, arg0, arg1);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, INFO, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishInfoFormat(this ILog logger, string format, object arg0, object arg1, object arg2) {
-			logger.InfoFormat(format, arg0, arg1, arg2);
-			var message = String.Format(format, arg0, arg1, arg2);
 			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 				Publish(message, INFO, null, null, logger.Logger.Name);
 			}
@@ -279,33 +180,9 @@ namespace Loggly {
 			}
 		}
 
-		public static void PublishDebugFormat(this ILog logger, string format, object arg0) {
-			logger.DebugFormat(format, arg0);
-			var message = String.Format(format, arg0);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, DEBUG, null, null, logger.Logger.Name);
-			}
-		}
-
 		public static void PublishDebugFormat(this ILog logger, string format, params object[] args) {
 			logger.DebugFormat(format, args);
 			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, DEBUG, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishDebugFormat(this ILog logger, string format, object arg0, object arg1) {
-			logger.DebugFormat(format, arg0, arg1);
-			var message = String.Format(format, arg0, arg1);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, DEBUG, null, null, logger.Logger.Name);
-			}
-		}
-
-		public static void PublishDebugFormat(this ILog logger, string format, object arg0, object arg1, object arg2) {
-			logger.DebugFormat(format, arg0, arg1, arg2);
-			var message = String.Format(format, arg0, arg1, arg2);
 			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 				Publish(message, DEBUG, null, null, logger.Logger.Name);
 			}
