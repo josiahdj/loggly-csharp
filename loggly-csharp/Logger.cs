@@ -10,7 +10,7 @@ namespace Loggly
 {
     public class Logger : ILogger, IRequestContext
     {
-        private string _url = "logs-01.loggly.com/";
+        private readonly string _url = "logs-01.loggly.com/";
         private readonly string _customerToken;
 
         public Logger(string customerToken, string alternativeUrl = null)
