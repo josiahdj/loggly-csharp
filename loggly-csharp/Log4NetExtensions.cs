@@ -31,11 +31,11 @@ namespace Loggly {
 				|| (category == ERROR && logger.IsErrorEnabled)
 				|| (category == FATAL && logger.IsFatalEnabled)) {
 				// only publish if enabled in Log4net config
-				Publish(message, category, data, exception, logger.Logger.Name);
+				publish(message, category, data, exception, logger.Logger.Name);
 			}
 		}
 
-		private static void Publish(object message, string category, Dictionary<string, object> data, Exception exception, string source) {
+		private static void publish(object message, string category, Dictionary<string, object> data, Exception exception, string source) {
 			if (_logglyLogger != null) {
 				var loggingEvent = new LoggingEvent(new LoggingEventData());
 				var dictionary = new Dictionary<string, object>(data ?? new Dictionary<string, object>())
@@ -63,24 +63,30 @@ namespace Loggly {
 		#region Fatal
 
 		public static void PublishFatal(this ILog logger, object message) {
-			logger.Fatal(message);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, FATAL, null, null, logger.Logger.Name);
+			if (logger.IsFatalEnabled) {
+				logger.Fatal(message);
+				if (_logglyLogger != null && message != null) {
+					publish(message, FATAL, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishFatal(this ILog logger, object message, Exception exception) {
-			logger.Fatal(message, exception);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, FATAL, null, exception, logger.Logger.Name);
+			if (logger.IsFatalEnabled) {
+				logger.Fatal(message, exception);
+				if (_logglyLogger != null && message != null) {
+					publish(message, FATAL, null, exception, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishFatalFormat(this ILog logger, string format, params object[] args) {
-			logger.FatalFormat(format, args);
-			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, FATAL, null, null, logger.Logger.Name);
+			if (logger.IsFatalEnabled) {
+				logger.FatalFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					publish(message, FATAL, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
@@ -89,24 +95,30 @@ namespace Loggly {
 		#region Error
 
 		public static void PublishError(this ILog logger, object message) {
-			logger.Error(message);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, ERROR, null, null, logger.Logger.Name);
+			if (logger.IsErrorEnabled) {
+				logger.Error(message);
+				if (_logglyLogger != null && message != null) {
+					publish(message, ERROR, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishError(this ILog logger, object message, Exception exception) {
-			logger.Error(message, exception);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, ERROR, null, exception, logger.Logger.Name);
+			if (logger.IsErrorEnabled) {
+				logger.Error(message, exception);
+				if (_logglyLogger != null && message != null) {
+					publish(message, ERROR, null, exception, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishErrorFormat(this ILog logger, string format, params object[] args) {
-			logger.ErrorFormat(format, args);
-			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, ERROR, null, null, logger.Logger.Name);
+			if (logger.IsErrorEnabled) {
+				logger.ErrorFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					publish(message, ERROR, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
@@ -115,24 +127,30 @@ namespace Loggly {
 		#region Warn
 
 		public static void PublishWarn(this ILog logger, object message) {
-			logger.Warn(message);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, WARN, null, null, logger.Logger.Name);
+			if (logger.IsWarnEnabled) {
+				logger.Warn(message);
+				if (_logglyLogger != null && message != null) {
+					publish(message, WARN, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishWarn(this ILog logger, object message, Exception exception) {
-			logger.Warn(message, exception);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, WARN, null, exception, logger.Logger.Name);
+			if (logger.IsWarnEnabled) {
+				logger.Warn(message, exception);
+				if (_logglyLogger != null && message != null) {
+					publish(message, WARN, null, exception, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishWarnFormat(this ILog logger, string format, params object[] args) {
-			logger.WarnFormat(format, args);
-			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, WARN, null, null, logger.Logger.Name);
+			if (logger.IsWarnEnabled) {
+				logger.WarnFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					publish(message, WARN, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
@@ -141,24 +159,30 @@ namespace Loggly {
 		#region Info
 
 		public static void PublishInfo(this ILog logger, object message) {
-			logger.Info(message);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, INFO, null, null, logger.Logger.Name);
+			if (logger.IsInfoEnabled) {
+				logger.Info(message);
+				if (_logglyLogger != null && message != null) {
+					publish(message, INFO, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishInfo(this ILog logger, object message, Exception exception) {
-			logger.Info(message, exception);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, INFO, null, exception, logger.Logger.Name);
+			if (logger.IsInfoEnabled) {
+				logger.Info(message, exception);
+				if (_logglyLogger != null && message != null) {
+					publish(message, INFO, null, exception, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishInfoFormat(this ILog logger, string format, params object[] args) {
-			logger.InfoFormat(format, args);
-			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, INFO, null, null, logger.Logger.Name);
+			if (logger.IsInfoEnabled) {
+				logger.InfoFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					publish(message, INFO, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
@@ -167,24 +191,30 @@ namespace Loggly {
 		#region Debug
 
 		public static void PublishDebug(this ILog logger, object message) {
-			logger.Debug(message);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, DEBUG, null, null, logger.Logger.Name);
+			if (logger.IsDebugEnabled) {
+				logger.Debug(message);
+				if (_logglyLogger != null && message != null) {
+					publish(message, DEBUG, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishDebug(this ILog logger, object message, Exception exception) {
-			logger.Debug(message, exception);
-			if (_logglyLogger != null && message != null) {
-				Publish(message, DEBUG, null, exception, logger.Logger.Name);
+			if (logger.IsDebugEnabled) {
+				logger.Debug(message, exception);
+				if (_logglyLogger != null && message != null) {
+					publish(message, DEBUG, null, exception, logger.Logger.Name);
+				}
 			}
 		}
 
 		public static void PublishDebugFormat(this ILog logger, string format, params object[] args) {
-			logger.DebugFormat(format, args);
-			var message = String.Format(format, args);
-			if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
-				Publish(message, DEBUG, null, null, logger.Logger.Name);
+			if (logger.IsDebugEnabled) {
+				logger.DebugFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					publish(message, DEBUG, null, null, logger.Logger.Name);
+				}
 			}
 		}
 
