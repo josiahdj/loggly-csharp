@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 using log4net;
 using log4net.Core;
@@ -35,18 +36,20 @@ namespace Loggly {
 			}
 		}
 
-		private static void publish(object message, string category, Dictionary<string, object> data, Exception exception, string source) {
+		private static void publish(object message, string severity, Dictionary<string, object> data, Exception exception, string source) {
 			if (_logglyLogger != null) {
 				var loggingEvent = new LoggingEvent(new LoggingEventData());
 				var dictionary = new Dictionary<string, object>(data ?? new Dictionary<string, object>())
 				{
 					{"message", message ?? ""},
 					{"source", String.IsNullOrEmpty(source) ? "?" : source},
-					{"severity", category},
-					{"appdomain", loggingEvent.Domain },
+					{"severity", severity},
 					{"thread-identity", loggingEvent.Identity },
 					{"thread-name", loggingEvent.ThreadName },
-					{"username", loggingEvent.UserName }
+					{"username", loggingEvent.UserName },
+					{"os", Environment.OSVersion.VersionString },
+					{"os-64bit", Environment.Is64BitOperatingSystem },
+					{"proc-64bit", Environment.Is64BitProcess }
 				};
 				if (exception != null) {
 					dictionary.Add("exception", exception.Message);
@@ -56,7 +59,7 @@ namespace Loggly {
 						dictionary.Add("innerstack", exception.StackTrace);
 					}
 				}
-				_logglyLogger.LogJson(JsonConvert.SerializeObject(dictionary), source, Environment.MachineName);
+				_logglyLogger.LogJson(JsonConvert.SerializeObject(dictionary), Environment.MachineName, loggingEvent.Domain);
 			}
 		}
 
@@ -80,12 +83,35 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishFatal(this ILog logger, object message, JsonProperty[] jsonProperties) {
+			if (logger.IsFatalEnabled) {
+				logger.Fatal(message + "; jsonProperties: " + String.Join(",", jsonProperties.Select(t => t.Name + "=" + t.Value)));
+				if (_logglyLogger != null && message != null) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, FATAL, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		public static void PublishFatalFormat(this ILog logger, string format, params object[] args) {
 			if (logger.IsFatalEnabled) {
 				logger.FatalFormat(format, args);
 				var message = String.Format(format, args);
 				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 					publish(message, FATAL, null, null, logger.Logger.Name);
+				}
+			}
+		}
+
+		public static void PublishFatalFormat(this ILog logger, string format, JsonProperty[] jsonProperties, params object[] args) {
+			if (logger.IsFatalEnabled) {
+				logger.FatalFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, FATAL, data, null, logger.Logger.Name);
 				}
 			}
 		}
@@ -112,12 +138,35 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishError(this ILog logger, object message, JsonProperty[] jsonProperties) {
+			if (logger.IsErrorEnabled) {
+				logger.Error(message + "; jsonProperties: " + String.Join(",", jsonProperties.Select(t => t.Name + "=" + t.Value)));
+				if (_logglyLogger != null && message != null) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, ERROR, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		public static void PublishErrorFormat(this ILog logger, string format, params object[] args) {
 			if (logger.IsErrorEnabled) {
 				logger.ErrorFormat(format, args);
 				var message = String.Format(format, args);
 				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 					publish(message, ERROR, null, null, logger.Logger.Name);
+				}
+			}
+		}
+
+		public static void PublishErrorFormat(this ILog logger, string format, JsonProperty[] jsonProperties, params object[] args) {
+			if (logger.IsErrorEnabled) {
+				logger.ErrorFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, ERROR, data, null, logger.Logger.Name);
 				}
 			}
 		}
@@ -144,12 +193,35 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishWarn(this ILog logger, object message, JsonProperty[] jsonProperties) {
+			if (logger.IsWarnEnabled) {
+				logger.Warn(message + "; jsonProperties: " + String.Join(",", jsonProperties.Select(t => t.Name + "=" + t.Value)));
+				if (_logglyLogger != null && message != null) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, WARN, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		public static void PublishWarnFormat(this ILog logger, string format, params object[] args) {
 			if (logger.IsWarnEnabled) {
 				logger.WarnFormat(format, args);
 				var message = String.Format(format, args);
 				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 					publish(message, WARN, null, null, logger.Logger.Name);
+				}
+			}
+		}
+
+		public static void PublishWarnFormat(this ILog logger, string format, JsonProperty[] jsonProperties, params object[] args) {
+			if (logger.IsWarnEnabled) {
+				logger.WarnFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, WARN, data, null, logger.Logger.Name);
 				}
 			}
 		}
@@ -176,12 +248,35 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishInfo(this ILog logger, object message, JsonProperty[] jsonProperties) {
+			if (logger.IsInfoEnabled) {
+				logger.Info(message + "; jsonProperties: " + String.Join(",", jsonProperties.Select(t => t.Name + "=" + t.Value)));
+				if (_logglyLogger != null && message != null) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, INFO, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		public static void PublishInfoFormat(this ILog logger, string format, params object[] args) {
 			if (logger.IsInfoEnabled) {
 				logger.InfoFormat(format, args);
 				var message = String.Format(format, args);
 				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
 					publish(message, INFO, null, null, logger.Logger.Name);
+				}
+			}
+		}
+
+		public static void PublishInfoFormat(this ILog logger, string format, JsonProperty[] jsonProperties, params object[] args) {
+			if (logger.IsInfoEnabled) {
+				logger.InfoFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, INFO, data, null, logger.Logger.Name);
 				}
 			}
 		}
@@ -208,6 +303,17 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishDebug(this ILog logger, object message, JsonProperty[] jsonProperties) {
+			if (logger.IsDebugEnabled) {
+				logger.Debug(message + "; jsonProperties: " + String.Join(",", jsonProperties.Select(t => t.Name + "=" + t.Value)));
+				if (_logglyLogger != null && message != null) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, DEBUG, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		public static void PublishDebugFormat(this ILog logger, string format, params object[] args) {
 			if (logger.IsDebugEnabled) {
 				logger.DebugFormat(format, args);
@@ -218,11 +324,37 @@ namespace Loggly {
 			}
 		}
 
+		public static void PublishDebugFormat(this ILog logger, string format, JsonProperty[] jsonProperties, params object[] args) {
+			if (logger.IsDebugEnabled) {
+				logger.DebugFormat(format, args);
+				var message = String.Format(format, args);
+				if (_logglyLogger != null && !String.IsNullOrEmpty(message)) {
+					var data = new Dictionary<string, object>();
+					addPropertiesToJsonData(jsonProperties, data);
+					publish(message, DEBUG, data, null, logger.Logger.Name);
+				}
+			}
+		}
+
 		#endregion
 
 		public static void WriteToLog(this ILog log, string sMessage, string sUserName, Exception obException = null) {
 			MDC.Set("@UserName", sUserName);
 			log.PublishDebug(sMessage, obException);
 		}
+
+		private static void addPropertiesToJsonData(IEnumerable<JsonProperty> jsonProperties, Dictionary<string, object> data) {
+			foreach (var jsonProperty in jsonProperties) {
+				var name = jsonProperty.Name.ToLower();
+				if (!data.ContainsKey(name)) {
+					data.Add(name, jsonProperty.Value);
+				}
+			}
+		}
+	}
+
+	public class JsonProperty {
+		public string Name { get; set; }
+		public string Value { get; set; }
 	}
 }
